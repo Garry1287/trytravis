@@ -1,3 +1,0 @@
-My first line in project
-Line1
-Line2
