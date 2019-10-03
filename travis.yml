@@ -1,0 +1,11 @@
+language: python
+python:
+- '3.6'
+install:
+- pip install -r requirements.txt
+script:
+- play-travis/test.py
+notifications:
+  slack:
+    rooms:
+      secure: H9BOFSc1Ic7/TH6C8NfAMidPQ4GwlebiHNPQ29/oyWx+LRimvgzp2ehrDYLcNnF4aVtOKPa7D04h/XLSkfEuxetiSTNvFicuad4EeQoB7Fb+EKny5QSIgn/JSYYWpy3UZBHy+e1JCYcOXum9HU6LGwoJlgptkGLQFQ7ZMkEWWY7nNH5eGTCQaBwEFsOCcixc+iup2hhWQvHVIL76QlqUmZlHX3npoXdCUlVA65Srfo/KJQii+ELLooBGA6ponFW3/Ds4aGBHrkMmjtsdBjBt2VL4Lf87VZkOGuK/2S65uDB/jWuxGd4ZrKlmof8TH0dGUaAp1bhlP8MKyRKjhqk6mSofW1/taZOT78RQk9ONVzDRye50SjBpCaAcfTE/lcCbczA/FJ3wnxR1ONuD9VNyn3aWxROA5jckmQYcZ6TJ9q0RCkouAOtcxoe3izBpq7bzmt5d5NPQQEQvkzGpAakH7j/ym/kk1HG6mQBViQJfqlMyWGJS+cP6tM6JNs8UAZxrpNKETa3PTVtlZX2njE4W/ATU5DcZjajvBF8Bqy7rZ8OKvpF/dAt+YgvKC+JWFtjWI+/SjK07Df5i5f668chbwFI6i43oAGizjPcillD/GpDPFSa5i2g6TV7J6eyVo7sP6ZSAOvcoe5cMEZWZahSVVbNpCoUXY3bM2MSwJceEPjw=
