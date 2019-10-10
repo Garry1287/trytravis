@@ -8,7 +8,6 @@ sudo apt-get install -y mongodb-org
 sudo systemctl start mongod
 sudo systemctl enable mongod
 sudo systemctl status mongod
-#https://docs.mongodb.com/v3.2/tutorial/install-mongodb-on-ubuntu/
 git clone -b monolith https://github.com/express42/reddit.git
 cd reddit && bundle install
 puma -d
