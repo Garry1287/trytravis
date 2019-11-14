@@ -28,11 +28,11 @@
         }
     ],
     "provisioners": [
-		{
-		    "type": "file",
-		    "source": "scripts/puma-server.service",
-		    "destination": "/tmp/puma-server.service"
-		},
+        {
+            "type": "file",
+            "source": "scripts/puma-server.service",
+            "destination": "/tmp/puma-server.service"
+        },
 		        {
             "type": "shell",
             "script": "scripts/install_ruby.sh",
