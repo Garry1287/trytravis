@@ -1,6 +1,6 @@
 terraform {
   # Версия terraform
-  required_version = "0.12.16" 
+  required_version = "0.12.16"
 }
 
 provider "google" {
@@ -8,8 +8,8 @@ provider "google" {
   version = "2.5.0"
 
   # ID проекта
-  project = "myprojtest-254911"
-  region  = "europe-west-1"
+  project = var.project
+  region  = var.region
 }
 
 resource "google_compute_instance" "app" {
@@ -21,7 +21,7 @@ resource "google_compute_instance" "app" {
   # определение загрузочного диска
   boot_disk {
     initialize_params {
-      image = "reddit-base"
+      image = var.disk_image
     }
   }
 
@@ -36,13 +36,13 @@ resource "google_compute_instance" "app" {
   }
   metadata = {
     # путь до публичного ключа
-    ssh-keys = "appuser:${file("~/.ssh/appuser.pub")}"
+    ssh-keys = "appuser:${file(var.public_key_path)}"
   }
   connection {
     type        = "ssh"
     user        = "appuser"
     agent       = false
-    host         = self.network_interface[0].access_config[0].nat_ip
+    host        = self.network_interface[0].access_config[0].nat_ip
     private_key = file("~/.ssh/appuser")
   }
   provisioner "file" {
@@ -51,7 +51,7 @@ resource "google_compute_instance" "app" {
   }
   provisioner "remote-exec" {
     script = "files/deploy.sh"
-  } 
+  }
 }
 
 resource "google_compute_firewall" "firewall_puma" {
