@@ -13,7 +13,8 @@ provider "google" {
 }
 
 resource "google_compute_instance" "app" {
-  name         = "reddit-app-terraform"
+  name         = "reddit-app-terraform${count.index}"
+  count        = var.instance_count
   machine_type = "g1-small"
   zone         = "europe-west1-b"
   tags         = ["reddit-app"]
@@ -29,11 +30,12 @@ resource "google_compute_instance" "app" {
   network_interface {
     # сеть, к которой присоединить данный интерфейс
     network = "default"
-
+    #network = google_compute_network.vpc_network.self_link
     # использовать ephemeral IP для доступа из Интернет
     access_config {
     }
   }
+
   metadata = {
     # путь до публичного ключа
     ssh-keys = "appuser:${file(var.public_key_path)}"
@@ -53,6 +55,12 @@ resource "google_compute_instance" "app" {
     script = "files/deploy.sh"
   }
 }
+
+#resource "google_compute_network" "vpc_network" {
+#  name                    = "terraform-network"
+#  auto_create_subnetworks = "true"
+#}
+
 
 resource "google_compute_firewall" "firewall_puma" {
   name = "allow-puma-default"

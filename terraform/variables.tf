@@ -13,3 +13,7 @@ variable public_key_path {
 variable disk_image {
   description = "Disk image"
 }
+variable instance_count {
+  type    = number
+  default = 2
+}
