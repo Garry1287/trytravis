@@ -5,7 +5,7 @@ resource "google_compute_instance" "db" {
   tags = ["reddit-db"]
   
   boot_disk {
-    initialize_params { image = var.app_disk_image }
+    initialize_params { image = var.db_disk_image }
   }
   
   network_interface {
