@@ -31,7 +31,7 @@ module "bucket_prod" {
 }
 
 output "bucket_prod_url" {
-  value = module.bucket_prod.url
+  value = module.bucket_prod.name
 }
 
 module "bucket_stage" {
@@ -43,5 +43,5 @@ module "bucket_stage" {
 }
 
 output "bucket_stage_url" {
-  value = module.bucket_stage.url
+  value = module.bucket_stage.name
 }
