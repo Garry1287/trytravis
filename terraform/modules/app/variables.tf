@@ -11,8 +11,14 @@ variable zone {
 variable public_key_path {
   # Описание переменной
   description = "Path to the public key used for ssh access"
+  default = "~/.ssh/appuser.pub"
 }
 variable app_disk_image {
   description = "Disk image for reddit app"
   default = "reddit-app-base"
 }
+variable mongod_ip {
+  description = "mongod internal ip"
+  default = "module.db.mongod_ip.value"
+}
+

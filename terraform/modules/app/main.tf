@@ -18,6 +18,27 @@ resource "google_compute_instance" "app" {
   metadata = {
     ssh-keys = "appuser:${file(var.public_key_path)}"
   }
+  
+  connection {
+    type        = "ssh"
+    host        = google_compute_address.app_ip.address
+    user        = "appuser"
+    agent       = false
+    private_key = file("~/.ssh/appuser")
+  }
+  
+  provisioner "remote-exec" {
+    inline = ["echo export DATABASE_URL=\"${var.mongod_ip}\" >> ~/.profile"]
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/files/puma.service"
+    destination = "/tmp/puma.service"
+  }
+
+  provisioner "remote-exec" {
+    script = "${path.module}/files/deploy.sh"
+  }
 }
 
 resource "google_compute_address" "app_ip" { name = "reddit-app-ip" }
@@ -40,3 +61,4 @@ resource "google_compute_firewall" "firewall_puma" {
   # Правило применимо для инстансов с перечисленными тэгами
   target_tags = ["reddit-app"]
 }
+
