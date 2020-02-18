@@ -1,6 +1,3 @@
-variable project {
-  description = "myprojtest-254911"
-}
 variable region {
   description = "Region"
   # Значение по умолчанию
@@ -14,17 +11,7 @@ variable zone {
 variable public_key_path {
   # Описание переменной
   description = "Path to the public key used for ssh access"
-}
-variable disk_image {
-  description = "Disk image"
-}
-variable instance_count {
-  type    = number
-  default = 2
-}
-variable app_disk_image {
-  description = "Disk image for reddit app"
-  default = "reddit-app-base"
+  default = "~/.ssh/appuser.pub"
 }
 variable db_disk_image {
   description = "Disk image for reddit db"

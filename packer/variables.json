@@ -1,7 +1,8 @@
 {
 	"project_id": "myprojtest-254911",
 	"machine_type": "f1-micro",
-	"image_family": "reddit-full"
+	"image_family": "reddit-full",
+	"source_image_family": "ubuntu-1604-lts"
 }
 
 
