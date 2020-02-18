@@ -17,6 +17,7 @@ module "app" {
   public_key_path = var.public_key_path
   zone            = var.zone
   app_disk_image  = var.app_disk_image
+  db_addr = module.db.internal_ip
 }
 
 module "db" {

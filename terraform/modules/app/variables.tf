@@ -21,4 +21,11 @@ variable mongod_ip {
   description = "mongod internal ip"
   default = "module.db.mongod_ip.value"
 }
-
+#variable db_external_ip {
+#  description = "database internal ip"
+#  default = "module.db.db_external_ip.value"
+#}
+variable db_addr {
+  description = "database internal ip"
+#  default = "module.db.internal_ip.value"
+}

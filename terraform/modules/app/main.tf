@@ -27,10 +27,6 @@ resource "google_compute_instance" "app" {
     private_key = file("~/.ssh/appuser")
   }
   
-  provisioner "remote-exec" {
-    inline = ["echo export DATABASE_URL=\"${var.mongod_ip}\" >> ~/.profile"]
-  }
-
   provisioner "file" {
     source      = "${path.module}/files/puma.service"
     destination = "/tmp/puma.service"
@@ -39,6 +35,16 @@ resource "google_compute_instance" "app" {
   provisioner "remote-exec" {
     script = "${path.module}/files/deploy.sh"
   }
+
+  provisioner "remote-exec" {
+#   inline = ["echo export DATABASE_URL=\"${var.mongod_ip}\" >> ~/.profile"]
+    inline = [
+      "echo 'export DATABASE_URL=${var.db_addr.0}' >> ~/.profile",
+      "export DATABASE_URL=${var.db_addr.0}",
+      "sudo systemctl restart puma.service",
+    ]
+  }
+
 }
 
 resource "google_compute_address" "app_ip" { name = "reddit-app-ip" }
