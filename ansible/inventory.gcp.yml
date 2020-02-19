@@ -1,0 +1,8 @@
+plugin: gcp_compute
+projects:
+  - myprojtest-254911
+zones:
+  - "europe-west1-b"
+filters: []
+auth_kind: serviceaccount
+service_account_file: "/home/garry/.ssh/myprojtest-254911-9b1bd3cb44d6.json"
