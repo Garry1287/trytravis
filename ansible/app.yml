@@ -1,9 +1,9 @@
 ---
 - name: Configure App
-  hosts: app
+  hosts: tag_reddit-app
   become: true
   vars:
-    db_host: 10.132.15.230
+    db_host: 10.132.0.3
   tasks:
     - name: Add unit file for Puma
       copy:
