@@ -19,6 +19,7 @@
   - name: Install mongodb package
     apt:
       name: mongodb-org
+      allow_unauthenticated: yes
       state: present
 
   # Включаем сервис
