@@ -1,9 +1,10 @@
 ---
 - name: Configure App
   hosts: tag_reddit-app
+#  hosts: app
   become: true
-  vars:
-    db_host: 10.132.0.22
+#  vars:
+#    db_host: 10.132.0.22
 
   roles:
     - app 

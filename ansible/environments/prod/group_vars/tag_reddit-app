@@ -1,4 +1,4 @@
-db_host: 10.132.0.24
+db_host: "{{ hostvars['reddit-db']['gce_private_ip'] }}"
 nginx_sites:
   default:
     - listen 80
