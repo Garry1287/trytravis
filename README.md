@@ -1474,4 +1474,196 @@ jobs:
 
       if: branch = master
 ```
-Думаю от трушенее, но сделал через bash
+Думаю что трушенее, но сделал через bash
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Курс DevOps 2019-08. Бортовой журнал. Часть 2. Microservices
+
+Задания со звездочкой отмечаются в журнале литерой Ж. Во-первых, символ астериск занят, а во-вторых это немного символично. Самую малось, разумеется.
+Docker-2 	Docker GCE 	D2 Ж 	D2 Задание Ж infra
+Docker-2
+
+• Создание docker host • Создание своего образа • Работа с Docker Hub
+Установка docker
+
+https://docs.docker.com/install/linux/docker-ce/ubuntu/ Установка docker prerequisites
+
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    software-properties-common
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+
+Попытка добавить репозиторий: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" # не для АРМ типа mint, собираем из пакетов: Установка из пакетов:
+
+sudo dpkg -i docker-ce-cli_19.03.5~3-0~debian-stretch_amd64.deb 
+sudo dpkg -i containerd.io_1.2.6-3_amd64.deb 
+sudo dpkg -i docker-ce_19.03.5~3-0~debian-stretch_amd64.deb 
+
+Проверка: docker version \ docker info Без повышения прав не показывает. sudo
+Первый запуск docker
+
+sudo docker run hello-world
+
+• docker client запросил у docker engine запуск container из image hello-world • docker engine не нашел image hello-world локально и скачал его с Docker Hub • docker engine создал и запустил container изimage hello-world и передал docker client вывод stdout контейнера • Docker run каждый раз запускает новый контейнер • Если не указывать флаг --rm при запуске docker run, то после остановки контейнер вместе с содержимым остается на диске
+
+Запустим docker образа ubuntu 16.04 c /bin/bash:
+
+$ sudo docker run -it ubuntu:16.04 /bin/bash
+Unable to find image 'ubuntu:16.04' locally
+16.04: Pulling from library/ubuntu
+e80174c8b43b: Pull complete 
+d1072db285cc: Pull complete 
+858453671e67: Pull complete 
+3d07b1124f98: Pull complete 
+Digest: sha256:bb5b48c7750a6a8775c74bcb601f7e5399135d0a06de004d000e05fd25c1a71c
+Status: Downloaded newer image for ubuntu:16.04
+root@f1791aaf1ee7:/# echo 'Hello world!' > /tmp/file
+root@f1791aaf1ee7:/# exit
+exit
+
+Повторим запуск. Убедимся, что файл /tmp/file отсутствует:
+
+$ sudo docker run -it ubuntu:16.04 /bin/bash
+root@aa2bb4c515ce:/# cat /tmp/file
+cat: /tmp/file: No such file or directory
+root@aa2bb4c515ce:/# exit
+exit
+
+Выведем список контейнеров найдем второй по времени запуска:
+
+$ sudo docker ps -a --format "table {{.ID}}\t{{.Image}}\t{{.CreatedAt}}\t{{.Names}}"
+CONTAINER ID        IMAGE               CREATED AT                      NAMES
+aa2bb4c515ce        ubuntu:16.04        2019-11-25 16:14:44 +0300 MSK   stoic_blackwell
+f1791aaf1ee7        ubuntu:16.04        2019-11-25 16:10:52 +0300 MSK   happy_chandrasekhar
+4dda79c8a3c0        hello-world         2019-11-25 15:59:06 +0300 MSK   gallant_austin
+
+И войдем него:
+
+$ sudo docker start f1791aaf1ee7  #  запуск уже имеющегося контейнера
+f1791aaf1ee7
+$ sudo docker attach f1791aaf1ee7 #  подключение к уже имеющемуся контейнеру
+root@f1791aaf1ee7:/# 
+root@f1791aaf1ee7:/# cat /tmp/file
+Hello world!
+
+Ctrl + p, Ctrl + q --> Escape sequence
+
+• docker run => docker create + docker start + docker attach(требуется указать ключ -i) • docker create используется, когда не нужно стартовать контейнер сразу
+
+Ключи запуска: • Через параметры передаются лимиты (cpu/mem/disk), ip, volumes • -i – запускает контейнер в foreground режиме (docker attach) • -d – запускаетконтейнерв background режиме • -t создает TTY • docker run -it ubuntu:16.04 bash • docker run -dt nginx:latest
+Docker exec
+
+docker exec запускает новый процесс внтури контейнера
+
+sudo docker exec -it f1791aaf1ee7 bash
+root@f1791aaf1ee7:/# ps aux
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.0  18232  3256 pts/0    Ss+  13:17   0:00 /bin/bash
+root        16  1.5  0.0  18232  3360 pts/1    Ss   13:32   0:00 bash
+root        25  0.0  0.0  34420  2860 pts/1    R+   13:32   0:00 ps aux
+root@f1791aaf1ee7:/# 
+
+Docker commit
+
+• Создает image из контейнера • Контейнер при этом остается запущенным
+
+$ sudo docker commit f1791aaf1ee7 guildin/ubuntu-tmp-file
+sha256:adaf9cefba52eb5f30e7ad034d9ce608c95a9d900a334504787d40a2540340be
+
+$ sudo docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED              SIZE
+guildin/ubuntu-tmp-file   latest              adaf9cefba52        About a minute ago   123MB
+ubuntu                    16.04               5f2bf26e3524        3 weeks ago          123MB
+hello-world               latest              fce289e99eb9        10 months ago        1.84kB
+
+Docker kill, docker stop
+
+• kill сразу посылает SIGKILL (безусловное завершение процесса) • stop посылает SIGTERM (останов), и через 10 секунд(настраивается) посылает SIGKILL
+
+sudo docker ps -q                     #  вывод списка запущенных контейнеров 
+sudo docker kill $(sudo docker ps -q) #  завершение процессов запущенных контейнеров.
+
+docker system df
+
+$ sudo docker system df
+TYPE                TOTAL               ACTIVE              SIZE                RECLAIMABLE
+Images              3                   2                   122.6MB             122.6MB (99%)
+Containers          3                   0                   83B                 83B (100%)
+Local Volumes       0                   0                   0B                  0B
+Build Cache         0                   0                   0B                  0B
+
+docker system df отображает количество дискового пространства, занятого образами, контейнерами и томами. Кросме того, отображается количество неиспользуемых ресурсов.
+Docker rm & rmi
+
+docker rm уничтожает контейнер, запущенный с ключом -f посылает sigkill работающему контейнеру и после удаляет его. docker rmi удаляет образ, если от него не запущены действующие контейнеры.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+garry@garry-w:~/devops_otus/garry_mikroservices/docker-monilith$ docker run --name reddit2 -d --network=host garry1287/fotus-reddit:1.0
+1c7086afd9170cc182d55f02ee6de27df9e1ac10d20057f92026bdc57eaea96e
+garry@garry-w:~/devops_otus/garry_mikroservices/docker-monilith$ docker stop reddit
+reddit
+garry@garry-w:~/devops_otus/garry_mikroservices/docker-monilith$ docker-machine ls
+NAME          ACTIVE   DRIVER   STATE     URL                       SWARM   DOCKER     ERRORS
+docker-host   *        google   Running   tcp://34.76.119.14:2376           v19.03.4   
+garry@garry-w:~/devops_otus/garry_mikroservices/docker-monilith$ docker ps
+CONTAINER ID        IMAGE                        COMMAND             CREATED             STATUS              PORTS               NAMES
+1c7086afd917        garry1287/fotus-reddit:1.0   "/start.sh"         25 seconds ago      Up 23 seconds                           reddit2
+
+
+
+
+docker-machine create --driver google \
+--google-machine-image https://www.googleapis.com/compute/v1/
+projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts \
+--google-machine-type n1-standard-1 \
+--google-zone europe-west1-b \
+
+
+Регион можно поменять на
+docker-host
