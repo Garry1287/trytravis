@@ -2,7 +2,7 @@ dist: trusty
 sudo: required
 language: bash
 before_install:
-- if [ $TRAVIS_PULL_REQUEST != "false"] || [ $TRAVIS_BRANCH == 'master' ]; then ./play-travis/trytravis.sh;
+- if [ $TRAVIS_PULL_REQUEST != "false"] || [ $TRAVIS_BRANCH == 'master' ]; then ./play-travis/trytravis.sh fi
 notifications:
   slack:
     secure: LKXKDMltSYR3WDE5j8imX/+QUUPb7MS0/NN9afYKVnIUPmowIRsU03Ir73896ItAGBljn5abVMsiSl/6JkJj5t1AxnduGd1erlS2zdKPEBuiBN/iaACr7Idx4hfrnY+fuQHKHTWKgKGqTk6dAr78wsIeaSJMaBIvCBgqSgAr0h2rSBBXrzogNDJ+AWx2kT9dW4X2J1z+RMYXpgflyk7n7XFQofMOJDTAMQqE9+xtHA7OhzDr0qt74kE0qXwP+mORh80WWRSXUGEz7FMbztLm6B5ULIdNEofC/vzCQ2J6Y6Vs5eVGHVZ53FO7hnWONEGH6mJonLJqEKUUxixRwoYOHxC88Zi6aBIybwhgYLJEoWlCPBXMRLQq1KDjSJC1iSQHsFWCW7E0lkXC9EhBMeWIWSuo1wb9FzkPc/LzK1FRB4xnO+ZBGvKRPH/1a4/Q/HCmiY0tFthNltU3dmU9Rg/0RnRSpJIzn6J3Y5WKOUiMi1/QT20DMyxZePyuUfMB2GBCCaxV5W2kCMmPpEK8KXaaiXapsmSi7sRva/MHSgNzNd9SOydl2YzBYsDh/IEijtM49Iio6vaRoN5znlTIo0gN8OG5Jsj0jmVCOuRE93ZLpqF4HpD1mdkjxzXC3mUVTJmiVlJNgmw7WImk2ZotfuNHpF+tJCob1DvmEYhY9rf2jaM=
