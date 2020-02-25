@@ -1,4 +1,6 @@
 #!/bin/bash
+set -x
+
 ########### Installing section #########################
 # Upgrade pip
 sudo pip install --upgrade pip
